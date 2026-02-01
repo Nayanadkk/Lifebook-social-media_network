@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialApp - Connect with Friends</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --primary-color: #1877f2;
+            --primary-dark: #166fe5;
+            --secondary-color: #42b72a;
+            --secondary-dark: #36a420;
+            --bg-color: #f0f2f5;
+            --card-color: #ffffff;
+            --text-primary: #050505;
+            --text-secondary: #65676b;
+            --border-color: #dddfe2;
+            --hover-color: #f2f2f2;
+            --shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        /* Login/OTP Screens */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .auth-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .auth-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 16px;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .auth-switch {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .auth-switch a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .otp-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .otp-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--card-color);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 10px 20px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary-color);
+            font-size: 32px;
+        }
+
+        .logo h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .search-bar {
+            flex: 0 0 40%;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            font-size: 15px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--primary-color);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 20px auto;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            flex: 0 0 250px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .sidebar-item i {
+            width: 28px;
+            text-align: center;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        .sidebar-item.active {
+            background-color: var(--hover-color);
+            font-weight: 600;
+        }
+
+        /* Feed Styles */
+        .feed {
+            flex: 1;
+            max-width: 680px;
+        }
+
+        /* Create Post */
+        .create-post {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .post-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .post-input-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .post-input-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .post-input {
+            flex: 1;
+        }
+
+        .post-input textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            resize: none;
+            font-size: 16px;
+            height: 60px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .post-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .post-action-btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        .post-action-btn i {
+            font-size: 20px;
+        }
+
+        .live-video i {
+            color: #f3425f;
+        }
+
+        .photo-video i {
+            color: #45bd62;
+        }
+
+        .feeling i {
+            color: #f7b928;
+        }
+
+        /* Posts */
+        .post {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .post-user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .post-user-info h4 {
+            font-size: 15px;
+        }
+
+        .post-user-info span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .post-options {
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 5px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .post-image img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .post-actions-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .post-action-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .post-action-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .post-action-button i {
+            font-size: 18px;
+        }
+
+        .like-btn:hover i, .like-btn.active i {
+            color: var(--primary-color);
+        }
+
+        .comment-btn:hover i {
+            color: #45bd62;
+        }
+
+        .share-btn:hover i {
+            color: #f7b928;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            flex: 0 0 300px;
+        }
+
+        .contacts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contacts-header h3 {
+            font-size: 17px;
+            color: var(--text-secondary);
+        }
+
+        .contacts-list {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .contact {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 5px;
+        }
+
+        .contact:hover {
+            background-color: var(--hover-color);
+        }
+
+        .contact-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .contact-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .online-indicator {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background-color: #31a24c;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .right-sidebar {
+                display: none;
+            }
+            .container {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+            .header-container {
+                justify-content: space-between;
+            }
+            .auth-card {
+                padding: 20px;
+            }
+        }
+
+        /* Travel Posts Specific */
+        .travel-post {
+            border-left: 4px solid #45bd62;
+        }
+
+        .tour-badge {
+            background-color: #45bd62;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Phone Login Screen -->
+    <div id="phoneLoginScreen" class="auth-container">
+        <div class="auth-card">
+            <i class="fas fa-users fa-3x" style="color: #1877f2; margin-bottom: 15px;"></i>
+            <h2>Welcome to SocialApp</h2>
+            <p>Connect with friends and the world around you</p>
+            
+            <input type="tel" id="phoneNumber" class="auth-input" placeholder="Enter phone number" required>
+            
+            <button id="sendOTPBtn" class="btn btn-primary" onclick="sendOTP()">Send OTP</button>
+            
+            <div class="auth-switch">
+                <a onclick="switchToEmailLogin()">Login with Email instead</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Login Screen -->
+    <div id="emailLoginScreen" class="auth-container hidden">
+        <div class="auth-card">
+            <i class="fas fa-envelope fa-3x" style="color: #1877f2; margin-bottom: 15px;"></i>
+            <h2>Email Login</h2>
+            <p>Login with your email and password</p>
+            
+            <input type="email" id="loginEmail" class="auth-input" placeholder="Email address" required>
+            <input type="password" id="loginPassword" class="auth-input" placeholder="Password" required>
+            
+            <button id="emailLoginBtn" class="btn btn-primary" onclick="emailLogin()">Log In</button>
+            
+            <div class="auth-switch">
+                <a onclick="switchToPhoneLogin()">Login with Phone instead</a> | 
+                <a onclick="showRegisterScreen()">Create New Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Verification Screen -->
+    <div id="otpScreen" class="auth-container hidden">
+        <div class="auth-card">
+            <i class="fas fa-mobile-alt fa-3x" style="color: #1877f2; margin-bottom: 15px;"></i>
+            <h2>Verify OTP</h2>
+            <p>Enter the 6-digit code sent to <span id="phoneNumberDisplay"></span></p>
+            
+            <div class="otp-container">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 2)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 3)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 4)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 5)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 6)">
+                <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 7)">
+            </div>
+            
+            <button id="verifyOTPBtn" class="btn btn-primary" onclick="verifyOTP()">Verify OTP</button>
+            
+            <div style="margin-top: 15px;">
+                <button class="btn" onclick="resendOTP()" style="background: #555; color: white;">Resend OTP</button>
+            </div>
+            
+            <div class="auth-switch">
+                <a onclick="goBackToPhoneLogin()">← Back to login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Screen -->
+    <div id="registerScreen" class="auth-container hidden">
+        <div class="auth-card">
+            <i class="fas fa-user-plus fa-3x" style="color: #1877f2; margin-bottom: 15px;"></i>
+            <h2>Create New Account</h2>
+            <p>Join SocialApp today</p>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="registerFirstName" class="auth-input" placeholder="First name" required style="flex: 1;">
+                <input type="text" id="registerLastName" class="auth-input" placeholder="Last name" required style="flex: 1;">
+            </div>
+            
+            <input type="email" id="registerEmail" class="auth-input" placeholder="Email address" required>
+            <input type="tel" id="registerPhone" class="auth-input" placeholder="Phone number" required>
+            <input type="password" id="registerPassword" class="auth-input" placeholder="New password" required>
+            
+            <input type="date" id="registerBirthday" class="auth-input" required>
+            
+            <div style="margin-bottom: 15px;">
+                <p style="margin-bottom: 10px; color: var(--text-secondary);">Gender</p>
+                <div style="display: flex; gap: 10px;">
+                    <label style="display: flex; align-items: center; gap: 5px; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; flex: 1; cursor: pointer;">
+                        <input type="radio" name="gender" value="male" required>
+                        <span>Male</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; flex: 1; cursor: pointer;">
+                        <input type="radio" name="gender" value="female" required>
+                        <span>Female</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; flex: 1; cursor: pointer;">
+                        <input type="radio" name="gender" value="other" required>
+                        <span>Other</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button id="registerBtn" class="btn btn-secondary" onclick="registerUser()">Sign Up</button>
+            
+            <div class="auth-switch">
+                <a onclick="showEmailLogin()">Already have an account? Log in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appContainer" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <i class="fas fa-users"></i>
+                    <h1>SocialApp</h1>
+                </div>
+                
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search SocialApp">
+                </div>
+                
+                <div class="user-menu">
+                    <div class="user-avatar" id="userAvatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                    </div>
+                    <button id="logoutBtn" class="btn btn-danger" style="padding: 8px 16px;">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-item active">
+                    <i class="fas fa-user"></i>
+                    <span id="sidebarUserName">John Doe</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-users"></i>
+                    <span>Friends</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-store"></i>
+                    <span>Marketplace</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-video"></i>
+                    <span>Watch</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-plane"></i>
+                    <span>Travel Groups</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>Events</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Saved</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-flag"></i>
+                    <span>Pages</span>
+                </div>
+                <div class="sidebar-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Jobs</span>
+                </div>
+            </aside>
+
+            <!-- Main Feed -->
+            <main class="feed">
+                <!-- Create Post -->
+                <div class="create-post">
+                    <div class="post-input-container">
+                        <div class="post-input-avatar" id="postInputAvatar">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                        </div>
+                        <div class="post-input">
+                            <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <div class="post-action-btn live-video">
+                            <i class="fas fa-video"></i>
+                            <span>Live video</span>
+                        </div>
+                        <div class="post-action-btn photo-video">
+                            <i class="fas fa-photo-video"></i>
+                            <span>Photo/video</span>
+                        </div>
+                        <div class="post-action-btn feeling">
+                            <i class="fas fa-laugh"></i>
+                            <span>Feeling/activity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posts will be loaded here -->
+                <div id="postsContainer">
+                    <div class="loading">Loading posts...</div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar -->
+            <aside class="right-sidebar">
+                <div class="contacts-header">
+                    <h3>Contacts</h3>
+                    <div>
+                        <i class="fas fa-video" style="margin-right: 15px; cursor: pointer;"></i>
+                        <i class="fas fa-search" style="cursor: pointer;"></i>
+                    </div>
+                </div>
+                
+                <div class="contacts-list" id="contactsList">
+                    <!-- Contacts will be loaded here -->
+                </div>
+
+                <!-- Travel Promotions -->
+                <div style="background-color: var(--card-color); border-radius: 10px; padding: 15px; margin-top: 20px; box-shadow: var(--shadow);">
+                    <h3 style="margin-bottom: 15px; color: var(--text-secondary);">Travel Promotions</h3>
+                    <div style="background-color: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                        <h4 style="color: #2e7d32;">Radha Krishna Tours</h4>
+                        <p style="font-size: 14px; color: #555;">Luxury Bus • Vrindavan • Balaji • Tirupati</p>
+                        <button style="background-color: #45bd62; color: white; border: none; padding: 8px 15px; border-radius: 5px; margin-top: 10px; width: 100%; cursor: pointer;">Book Now</button>
+                    </div>
+                    <div style="background-color: #e3f2fd; padding: 10px; border-radius: 8px;">
+                        <h4 style="color: #1565c0;">Travel Nepal</h4>
+                        <p style="font-size: 14px; color: #555;">Three Dham Yatra Booking Open</p>
+                        <button style="background-color: #1877f2; color: white; border: none; padding: 8px 15px; border-radius: 5px; margin-top: 10px; width: 100%; cursor: pointer;">View Details</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Mock Database (In a real app, this would be a backend API)
+        const mockDatabase = {
+            users: JSON.parse(localStorage.getItem('socialAppUsers')) || [
+                {
+                    id: 1,
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    email: 'john@example.com',
+                    phone: '+1234567890',
+                    password: 'password123',
+                    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                    friends: [2, 3, 4, 5]
+                },
+                {
+                    id: 2,
+                    firstName: 'Jane',
+                    lastName: 'Smith',
+                    email: 'jane@example.com',
+                    phone: '+0987654321',
+                    password: 'password123',
+                    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+                    friends: [1, 3, 6]
+                },
+                {
+                    id: 3,
+                    firstName: 'Mike',
+                    lastName: 'Johnson',
+                    email: 'mike@example.com',
+                    phone: '+1122334455',
+                    password: 'password123',
+                    avatar: 'https://randomuser.me/api/portraits/men/67.jpg',
+                    friends: [1, 2, 4]
+                },
+                {
+                    id: 4,
+                    firstName: 'Sarah',
+                    lastName: 'Williams',
+                    email: 'sarah@example.com',
+                    phone: '+5566778899',
+                    password: 'password123',
+                    avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+                    friends: [1, 3, 5]
+                },
+                {
+                    id: 5,
+                    firstName: 'David',
+                    lastName: 'Brown',
+                    email: 'david@example.com',
+                    phone: '+9988776655',
+                    password: 'password123',
+                    avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
+                    friends: [1, 4, 6]
+                },
+                {
+                    id: 6,
+                    firstName: 'Emily',
+                    lastName: 'Davis',
+                    email: 'emily@example.com',
+                    phone: '+4433221100',
+                    password: 'password123',
+                    avatar: 'https://randomuser.me/api/portraits/women/33.jpg',
+                    friends: [2, 5]
+                }
+            ],
+            
+            posts: JSON.parse(localStorage.getItem('socialAppPosts')) || [
+                {
+                    id: 1,
+                    userId: 1,
+                    content: "Just finished my morning run! Feeling energized and ready for the day. What's everyone up to today?",
+                    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    likes: [2, 3, 4],
+                    comments: [
+                        { userId: 2, text: "Wow, that's amazing! I need to start exercising too." },
+                        { userId: 3, text: "Great job! What's your running route?" }
+                    ],
+                    timestamp: "2023-10-15T09:30:00"
+                },
+                {
+                    id: 2,
+                    userId: 2,
+                    content: "Just tried this new restaurant downtown. The food was incredible! Highly recommend it to everyone.",
+                    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    likes: [1, 4, 5],
+                    comments: [
+                        { userId: 1, text: "What's the name of the restaurant? I'd love to check it out!" }
+                    ],
+                    timestamp: "2023-10-14T19:15:00"
+                },
+                {
+                    id: 3,
+                    userId: 7,
+                    content: "Luxury Bus Tour to Vrindavan, Balaji, and Tirupati starting next month! Special discount for early bookings.",
+                    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    likes: [1, 2, 4, 5],
+                    comments: [
+                        { userId: 3, text: "Interested! What are the dates?" }
+                    ],
+                    timestamp: "2023-10-14T11:45:00",
+                    isTravel: true,
+                    company: "Radha Krishna Tours"
+                },
+                {
+                    id: 4,
+                    userId: 8,
+                    content: "Three Dham Yatra bookings are now open! Limited seats available. Package includes accommodation, food, and travel.",
+                    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    likes: [1, 2, 3, 6],
+                    comments: [
+                        { userId: 5, text: "Can you share the itinerary?" }
+                    ],
+                    timestamp: "2023-10-13T18:30:00",
+                    isTravel: true,
+                    company: "Travel Nepal"
+                }
+            ],
+            
+            currentUser: JSON.parse(localStorage.getItem('socialAppCurrentUser')) || null,
+            generatedOTPs: JSON.parse(localStorage.getItem('socialAppGeneratedOTPs')) || {}
+        };
+
+        // Add travel companies to users
+        if (!mockDatabase.users.find(u => u.id === 7)) {
+            mockDatabase.users.push({
+                id: 7,
+                firstName: 'Radha Krishna',
+                lastName: 'Tours',
+                email: 'info@radhakrishnatours.com',
+                phone: '+911234567890',
+                password: 'password123',
+                avatar: 'https://images.unsplash.com/photo-1596727147705-61a532a659bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                friends: [1, 2, 3, 4, 5, 6],
+                isCompany: true
+            });
+        }
+
+        if (!mockDatabase.users.find(u => u.id === 8)) {
+            mockDatabase.users.push({
+                id: 8,
+                firstName: 'Travel',
+                lastName: 'Nepal',
+                email: 'contact@travelnepal.com',
+                phone: '+977123456789',
+                password: 'password123',
+                avatar: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                friends: [1, 2, 3, 4, 5, 6],
+                isCompany: true
+            });
+        }
+
+        // DOM Elements
+        const phoneLoginScreen = document.getElementById('phoneLoginScreen');
+        const emailLoginScreen = document.getElementById('emailLoginScreen');
+        const otpScreen = document.getElementById('otpScreen');
+        const registerScreen = document.getElementById('registerScreen');
+        const appContainer = document.getElementById('appContainer');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const phoneNumberDisplay = document.getElementById('phoneNumberDisplay');
+        const loginEmailInput = document.getElementById('loginEmail');
+        const loginPasswordInput = document.getElementById('loginPassword');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const postContent = document.getElementById('postContent');
+        const postsContainer = document.getElementById('postsContainer');
+        const contactsList = document.getElementById('contactsList');
+        const sidebarUserName = document.getElementById('sidebarUserName');
+        const postInputAvatar = document.getElementById('postInputAvatar');
+        const userAvatar = document.getElementById('userAvatar');
+
+        // App State
+        let currentUser = mockDatabase.currentUser;
+        let generatedOTP = null;
+        let currentPhoneNumber = null;
+
+        // Initialize App
+        function initApp() {
+            if (currentUser) {
+                showApp();
+                loadUserData();
+                loadPosts();
+                loadContacts();
+            } else {
+                showPhoneLogin();
+            }
+        }
+
+        // Show phone login
+        function showPhoneLogin() {
+            phoneLoginScreen.classList.remove('hidden');
+            emailLoginScreen.classList.add('hidden');
+            otpScreen.classList.add('hidden');
+            registerScreen.classList.add('hidden');
+            appContainer.classList.add('hidden');
+        }
+
+        // Show email login
+        function showEmailLogin() {
+            phoneLoginScreen.classList.add('hidden');
+            emailLoginScreen.classList.remove('hidden');
+            otpScreen.classList.add('hidden');
+            registerScreen.classList.add('hidden');
+            appContainer.classList.add('hidden');
+        }
+
+        // Show OTP screen
+        function showOTPScreen(phoneNumber) {
+            phoneLoginScreen.classList.add('hidden');
+            emailLoginScreen.classList.add('hidden');
+            otpScreen.classList.remove('hidden');
+            registerScreen.classList.add('hidden');
+            appContainer.classList.add('hidden');
+            
+            phoneNumberDisplay.textContent = phoneNumber;
+            currentPhoneNumber = phoneNumber;
+            
+            // Clear OTP inputs
+            document.querySelectorAll('.otp-input').forEach(input => {
+                input.value = '';
+            });
+            
+            // Focus first OTP input
+            document.querySelector('.otp-input').focus();
+        }
+
+        // Show register screen
+        function showRegisterScreen() {
+            phoneLoginScreen.classList.add('hidden');
+            emailLoginScreen.classList.add('hidden');
+            otpScreen.classList.add('hidden');
+            registerScreen.classList.remove('hidden');
+            appContainer.classList.add('hidden');
+        }
+
+        // Show main app
+        function showApp() {
+            phoneLoginScreen.classList.add('hidden');
+            emailLoginScreen.classList.add('hidden');
+            otpScreen.classList.add('hidden');
+            registerScreen.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+        }
+
+        // Send OTP
+        function sendOTP() {
+            const phoneNumber = phoneNumberInput.value.trim();
+            
+            if (phoneNumber.length < 5) {
+                alert("Please enter a valid phone number");
+                return;
+            }
+            
+            // Generate 6-digit OTP
+            generatedOTP = Math.floor(100000 + Math.random() * 900000);
+            
+            // Store OTP in mock database
+            mockDatabase.generatedOTPs[phoneNumber] = {
+                otp: generatedOTP,
+                timestamp: new Date().getTime()
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('socialAppGeneratedOTPs', JSON.stringify(mockDatabase.generatedOTPs));
+            
+            // In real app, send SMS here
+            console.log(`OTP for ${phoneNumber}: ${generatedOTP}`);
+            alert(`OTP sent to ${phoneNumber}. In this demo, OTP is: ${generatedOTP}`);
+            
+            showOTPScreen(phoneNumber);
+        }
+
+        // Resend OTP
+        function resendOTP() {
+            if (!currentPhoneNumber) return;
+            
+            generatedOTP = Math.floor(100000 + Math.random() * 900000);
+            
+            // Update OTP in mock database
+            mockDatabase.generatedOTPs[currentPhoneNumber] = {
+                otp: generatedOTP,
+                timestamp: new Date().getTime()
+            };
+            
+            localStorage.setItem('socialAppGeneratedOTPs', JSON.stringify(mockDatabase.generatedOTPs));
+            
+            console.log(`Resent OTP for ${currentPhoneNumber}: ${generatedOTP}`);
+            alert(`New OTP sent: ${generatedOTP}`);
+        }
+
+        // Verify OTP
+        function verifyOTP() {
+            // Get OTP from input fields
+            const otpInputs = document.querySelectorAll('.otp-input');
+            let enteredOTP = '';
+            otpInputs.forEach(input => {
+                enteredOTP += input.value;
+            });
+            
+            if (enteredOTP.length !== 6) {
+                alert("Please enter the complete 6-digit OTP");
+                return;
+            }
+            
+            const storedOTPData = mockDatabase.generatedOTPs[currentPhoneNumber];
+            
+            if (!storedOTPData) {
+                alert("OTP expired or not found. Please request a new OTP.");
+                return;
+            }
+            
+            // Check if OTP is expired (5 minutes)
+            const currentTime = new Date().getTime();
+            const otpAge = currentTime - storedOTPData.timestamp;
+            const fiveMinutes = 5 * 60 * 1000;
+            
+            if (otpAge > fiveMinutes) {
+                alert("OTP has expired. Please request a new OTP.");
+                delete mockDatabase.generatedOTPs[currentPhoneNumber];
+                localStorage.setItem('socialAppGeneratedOTPs', JSON.stringify(mockDatabase.generatedOTPs));
+                return;
+            }
+            
+            if (parseInt(enteredOTP) === storedOTPData.otp) {
+                // Find or create user
+                let user = mockDatabase.users.find(u => u.phone === currentPhoneNumber);
+                
+                if (!user) {
+                    // Create new user with phone number
+                    const newUserId = mockDatabase.users.length > 0 ? 
+                        Math.max(...mockDatabase.users.map(u => u.id)) + 1 : 1;
+                    
+                    // Generate random avatar
+                    const randomId = Math.floor(Math.random() * 99) + 1;
+                    const gender = Math.random() > 0.5 ? 'men' : 'women';
+                    const avatar = `https://randomuser.me/api/portraits/${gender}/${randomId}.jpg`;
+                    
+                    user = {
+                        id: newUserId,
+                        firstName: 'User',
+                        lastName: currentPhoneNumber.substring(currentPhoneNumber.length - 4),
+                        email: `user${newUserId}@example.com`,
+                        phone: currentPhoneNumber,
+                        password: 'phoneuser123',
+                        avatar: avatar,
+                        friends: []
+                    };
+                    
+                    mockDatabase.users.push(user);
+                    localStorage.setItem('socialAppUsers', JSON.stringify(mockDatabase.users));
+                }
+                
+                // Login user
+                currentUser = { id: user.id, email: user.email, phone: user.phone };
+                mockDatabase.currentUser = currentUser;
+                localStorage.setItem('socialAppCurrentUser', JSON.stringify(currentUser));
+                
+                // Clear OTP from storage
+                delete mockDatabase.generatedOTPs[currentPhoneNumber];
+                localStorage.setItem('socialAppGeneratedOTPs', JSON.stringify(mockDatabase.generatedOTPs));
+                
+                showApp();
+                loadUserData();
+                loadPosts();
+                loadContacts();
+                
+                alert("Login successful!");
+            } else {
+                alert("Incorrect OTP. Please try again.");
+            }
+        }
+
+        // Email login
+        function emailLogin() {
+            const email = loginEmailInput.value.trim();
+            const password = loginPasswordInput.value;
+            
+            // Find user
+            const user = mockDatabase.users.find(u => 
+                u.email === email && u.password === password
+            );
+            
+            if (user) {
+                currentUser = { id: user.id, email: user.email, phone: user.phone };
+                mockDatabase.currentUser = currentUser;
+                
+                // Save to localStorage
+                localStorage.setItem('socialAppCurrentUser', JSON.stringify(currentUser));
+                localStorage.setItem('socialAppUsers', JSON.stringify(mockDatabase.users));
+                localStorage.setItem('socialAppPosts', JSON.stringify(mockDatabase.posts));
+                
+                showApp();
+                loadUserData();
+                loadPosts();
+                loadContacts();
+                
+                // Clear form
+                loginEmailInput.value = '';
+                loginPasswordInput.value = '';
+            } else {
+                alert('Invalid email or password. Try: john@example.com / password123');
+            }
+        }
+
+        // Register user
+        function registerUser() {
+            const firstName = document.getElementById('registerFirstName').value.trim();
+            const lastName = document.getElementById('registerLastName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const birthday = document.getElementById('registerBirthday').value;
+            const gender = document.querySelector('input[name="gender"]:checked')?.value;
+            
+            // Validation
+            if (!firstName || !lastName || !email || !phone || !password || !birthday || !gender) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Check if user already exists
+            const existingUser = mockDatabase.users.find(u => u.email === email || u.phone === phone);
+            if (existingUser) {
+                alert('User with this email or phone already exists!');
+                return;
+            }
+            
+            // Create new user
+            const newUserId = mockDatabase.users.length > 0 ? 
+                Math.max(...mockDatabase.users.map(u => u.id)) + 1 : 1;
+            
+            // Generate avatar based on gender
+            const avatarGender = gender === 'female' ? 'women' : 'men';
+            const randomId = Math.floor(Math.random() * 99) + 1;
+            const avatar = `https://randomuser.me/api/portraits/${avatarGender}/${randomId}.jpg`;
+            
+            const newUser = {
+                id: newUserId,
+                firstName,
+                lastName,
+                email,
+                phone,
+                password,
+                avatar,
+                friends: [],
+                birthday,
+                gender
+            };
+            
+            mockDatabase.users.push(newUser);
+            currentUser = { id: newUser.id, email: newUser.email, phone: newUser.phone };
+            mockDatabase.currentUser = currentUser;
+            
+            // Save to localStorage
+            localStorage.setItem('socialAppCurrentUser', JSON.stringify(currentUser));
+            localStorage.setItem('socialAppUsers', JSON.stringify(mockDatabase.users));
+            
+            showApp();
+            loadUserData();
+            loadPosts();
+            loadContacts();
+            
+            // Clear form
+            document.getElementById('registerForm').reset();
+            
+            alert('Account created successfully! Welcome to SocialApp.');
+        }
+
+        // Load user data
+        function loadUserData() {
+            if (!currentUser) return;
+            
+            const user = mockDatabase.users.find(u => u.id === currentUser.id);
+            if (user) {
+                sidebarUserName.textContent = `${user.firstName} ${user.lastName}`;
+                postInputAvatar.innerHTML = `<img src="${user.avatar}" alt="User">`;
+                userAvatar.innerHTML = `<img src="${user.avatar}" alt="User">`;
+            }
+        }
+
+        // Load posts
+        function loadPosts() {
+            // Sort posts by timestamp (newest first)
+            const sortedPosts = [...mockDatabase.posts].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+            
+            postsContainer.innerHTML = '';
+            
+            if (sortedPosts.length === 0) {
+                postsContainer.innerHTML = '<div class="loading">No posts yet. Be the first to post!</div>';
+                return;
+            }
+            
+            sortedPosts.forEach(post => {
+                const user = mockDatabase.users.find(u => u.id === post.userId);
+                if (!user) return;
+                
+                const postElement = document.createElement('div');
+                postElement.className = `post ${post.isTravel ? 'travel-post' : ''}`;
+                postElement.dataset.postId = post.id;
+                
+                const timeAgo = getTimeAgo(post.timestamp);
+                const isLiked = post.likes && post.likes.includes(currentUser.id);
+                
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-user">
+                            <div class="post-user-avatar">
+                                <img src="${user.avatar}" alt="${user.firstName}">
+                            </div>
+                            <div class="post-user-info">
+                                <h4>${user.firstName} ${user.lastName} 
+                                ${post.isTravel ? '<span class="tour-badge">Travel</span>' : ''}</h4>
+                                <span>${timeAgo} · <i class="fas fa-globe-americas"></i></span>
+                            </div>
+                        </div>
+                        <div class="post-options">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="post-content">
+                        ${post.content}
+                    </div>
+                    
+                    ${post.image ? `
+                    <div class="post-image">
+                        <img src="${post.image}" alt="Post image">
+                    </div>
+                    ` : ''}
+                    
+                    <div class="post-stats">
+                        <div class="likes-count">
+                            <i class="fas fa-thumbs-up"></i> ${post.likes ? post.likes.length : 0}
+                        </div>
+                        <div class="comments-count">
+                            ${post.comments ? post.comments.length : 0} comments
+                        </div>
+                    </div>
+                    
+                    <div class="post-actions-buttons">
+                        <div class="post-action-button like-btn ${isLiked ? 'active' : ''}" data-post-id="${post.id}">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span>Like</span>
+                        </div>
+                        <div class="post-action-button comment-btn" data-post-id="${post.id}">
+                            <i class="fas fa-comment-alt"></i>
+                            <span>Comment</span>
+                        </div>
+                        <div class="post-action-button share-btn" data-post-id="${post.id}">
+                            <i class="fas fa-share"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                `;
+                
+                postsContainer.appendChild(postElement);
+            });
+            
+            // Add event listeners to like buttons
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', handleLike);
+            });
+            
+            // Add event listeners to comment buttons
+            document.querySelectorAll('.comment-btn').forEach(btn => {
+                btn.addEventListener('click', handleComment);
+            });
+        }
+
+        // Load contacts
+        function loadContacts() {
+            if (!currentUser) return;
+            
+            const user = mockDatabase.users.find(u => u.id === currentUser.id);
+            if (!user) return;
+            
+            // Get user's friends
+            const friends = mockDatabase.users.filter(u => 
+                u.id !== currentUser.id && user.friends && user.friends.includes(u.id)
+            );
+            
+            contactsList.innerHTML = '';
+            
+            if (friends.length === 0) {
+                contactsList.innerHTML = '<div class="loading">No contacts yet. Add some friends!</div>';
+                return;
+            }
+            
+            friends.forEach(friend => {
+                const contactElement = document.createElement('div');
+                contactElement.className = 'contact';
+                
+                contactElement.innerHTML = `
+                    <div class="contact-avatar">
+                        <img src="${friend.avatar}" alt="${friend.firstName}">
+                        <div class="online-indicator"></div>
+                    </div>
+                    <span>${friend.firstName} ${friend.lastName}</span>
+                `;
+                
+                contactsList.appendChild(contactElement);
+            });
+        }
+
+        // Handle like
+        function handleLike(e) {
+            if (!currentUser) return;
+            
+            const postId = parseInt(e.currentTarget.dataset.postId);
+            const post = mockDatabase.posts.find(p => p.id === postId);
+            
+            if (!post) return;
+            
+            if (!post.likes) post.likes = [];
+            
+            const likeIndex = post.likes.indexOf(currentUser.id);
+            
+            if (likeIndex === -1) {
+                post.likes.push(currentUser.id);
+                e.currentTarget.classList.add('active');
+            } else {
+                post.likes.splice(likeIndex, 1);
+                e.currentTarget.classList.remove('active');
+            }
+            
+            // Update likes count in UI
+            const likesCountElement = e.currentTarget.closest('.post').querySelector('.likes-count');
+            likesCountElement.innerHTML = `<i class="fas fa-thumbs-up"></i> ${post.likes.length}`;
+            
+            // Save to localStorage
+            localStorage.setItem('socialAppPosts', JSON.stringify(mockDatabase.posts));
+        }
+
+        // Handle comment
+        function handleComment(e) {
+            if (!currentUser) return;
+            
+            const postId = parseInt(e.currentTarget.dataset.postId);
+            const post = mockDatabase.posts.find(p => p.id === postId);
+            
+            if (!post) return;
+            
+            const commentText = prompt('Enter your comment:');
+            if (commentText && commentText.trim()) {
+                if (!post.comments) post.comments = [];
+                
+                post.comments.push({
+                    userId: currentUser.id,
+                    text: commentText.trim()
+                });
+                
+                // Update comments count in UI
+                const commentsCountElement = e.currentTarget.closest('.post').querySelector('.comments-count');
+                commentsCountElement.textContent = `${post.comments.length} comments`;
+                
+                // Save to localStorage
+                localStorage.setItem('socialAppPosts', JSON.stringify(mockDatabase.posts));
+                
+                alert('Comment added!');
+            }
+        }
+
+        // Handle post creation
+        postContent.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                createPost();
+            }
+        });
+
+        // Create new post
+        function createPost() {
+            const content = postContent.value.trim();
+            
+            if (!content) {
+                alert('Please enter some content for your post.');
+                return;
+            }
+            
+            if (!currentUser) {
+                alert('You must be logged in to post.');
+                return;
+            }
+            
+            // Create new post
+            const newPostId = mockDatabase.posts.length > 0 ? 
+                Math.max(...mockDatabase.posts.map(p => p.id)) + 1 : 1;
+            
+            const newPost = {
+                id: newPostId,
+                userId: currentUser.id,
+                content: content,
+                likes: [],
+                comments: [],
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add image randomly (for demo purposes)
+            if (Math.random() > 0.5) {
+                const images = [
+                    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
+                    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
+                ];
+                newPost.image = images[Math.floor(Math.random() * images.length)];
+            }
+            
+            mockDatabase.posts.unshift(newPost);
+            
+            // Save to localStorage
+            localStorage.setItem('socialAppPosts', JSON.stringify(mockDatabase.posts));
+            
+            // Clear input
+            postContent.value = '';
+            
+            // Reload posts
+            loadPosts();
+            
+            alert('Post created successfully!');
+        }
+
+        // Logout
+        logoutBtn.addEventListener('click', function() {
+            currentUser = null;
+            mockDatabase.currentUser = null;
+            localStorage.removeItem('socialAppCurrentUser');
+            showPhoneLogin();
+        });
+
+        // Navigation between auth screens
+        function switchToEmailLogin() {
+            showEmailLogin();
+        }
+
+        function switchToPhoneLogin() {
+            showPhoneLogin();
+        }
+
+        function goBackToPhoneLogin() {
+            showPhoneLogin();
+        }
+
+        // OTP input navigation
+        function moveToNext(input, nextIndex) {
+            if (input.value.length === 1) {
+                const nextInput = document.querySelector(`.otp-container input:nth-child(${nextIndex})`);
+                if (nextInput) {
+                    nextInput.focus();
+                } else {
+                    // If last input, auto verify
+                    setTimeout(verifyOTP, 300);
+                }
+            }
+        }
+
+        // Helper function to get time ago
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const postDate = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - postDate) / 1000);
+            
+            if (diffInSeconds < 60) {
+                return 'Just now';
+            } else if (diffInSeconds < 3600) {
+                const minutes = Math.floor(diffInSeconds / 60);
+                return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 86400) {
+                const hours = Math.floor(diffInSeconds / 3600);
+                return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+            } else if (diffInSeconds < 604800) {
+                const days = Math.floor(diffInSeconds / 86400);
+                return `${days} day${days !== 1 ? 's' : ''} ago`;
+            } else {
+                return postDate.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            }
+        }
+
+        // Demo: Add event listeners to post action buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.live-video')) {
+                alert('Live video feature coming soon!');
+            } else if (e.target.closest('.photo-video')) {
+                alert('Photo/video upload feature coming soon!');
+            } else if (e.target.closest('.feeling')) {
+                alert('Feeling/activity feature coming soon!');
+            } else if (e.target.closest('.share-btn')) {
+                alert('Share feature coming soon!');
+            } else if (e.target.closest('.post-options')) {
+                alert('Post options menu coming soon!');
+            } else if (e.target.closest('.contact')) {
+                const contactName = e.target.closest('.contact').querySelector('span').textContent;
+                alert(`Starting chat with ${contactName}`);
+            }
+        });
+
+        // Initialize the app
+        initApp();
+    </script>
+</body>
+</html>
